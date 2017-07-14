@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Kandid.ly </title>
+	<link rel="stylesheet" type="text/css" href="https://cloud.typography.com/7121176/7881772/css/fonts.css" />
+	<link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
+	<link rel="stylesheet" href="css/basscss.min.css">
+	<script src="https://use.fontawesome.com/824891e007.js"></script>
+	<link rel="stylesheet" href="css/style.css">
+
+	<script src="js/jquery-3.1.1.min.js"></script>
+	
+
+	<script>
+	$( document ).ready(function() {
+
+		// Contextual menu (the dot dot dot on mobile screen header)
+		function menuOpen() {
+			$('.modal').empty();
+			var $menu = $('.album-details').clone();
+			$('.modal').prepend($menu);
+	  		$('.modal, .backdrop').addClass('open');
+	  		$('.dots i').removeClass("fa-ellipsis-v").addClass("fa-close");
+		    $(this).one("click", menuClose);
+		    return false;
+		}
+		function menuClose() {
+	  		$('.modal, .backdrop').removeClass('open');
+	  		$('.dots i').removeClass("fa-close").addClass("fa-ellipsis-v");
+		    $(this).one("click", menuOpen);
+		    return false;
+		}
+		$(".dots").one("click", menuOpen);
+
+
+		// Share modal (launched from a share button)
+		function shareOpen() {
+			$('.modal').empty();
+			var $content = $('.share.single').clone();
+			$('.modal').prepend($content);
+	  		$('.modal, .backdrop').addClass('open');
+	  		$('.round-button.share i').removeClass("fa-share").addClass("fa-close");
+	  		$('.round-button.share span').text("BACK");
+		    $(this).one("click", shareClose);
+		    return false;
+		}
+		function shareClose() {
+	  		$('.modal, .backdrop').removeClass('open');
+	  		$('.round-button.share i').removeClass("fa-close").addClass("fa-share");
+	  		$('.round-button.share span').text("SHARE");
+		    $(this).one("click", shareOpen);
+		    return false;
+		}
+		$(".round-button.share").one("click", shareOpen);
+
+
+		// View options (change from full-width to grid)
+		$( ".grid" ).click(function() {
+		  $( ".stream").addClass("grid");
+		  //check window size, fire Isotope on mobile
+		  if (parseInt($(window).width()) < 640) {
+		  	$('.stream').isotope({
+			  itemSelector: '.image',
+			  percentPosition: true
+			});
+		  }
+		  //tweak active colors
+		  $(this).removeClass("lighter");
+		  $(".full").addClass("lighter");
+		  return false;
+		});
+		$( ".full" ).click(function() {
+		  $( ".stream").removeClass("grid");
+		  //check window size, destroy Isotope if needed
+		  if (parseInt($(window).width()) > 640) {
+		  	$('.stream').isotope('destroy');
+		  }
+		  //tweak active colors
+		  $(this).removeClass("lighter");
+		  $(".grid").addClass("lighter");
+		  return false;
+		});
+
+	});
+
+	</script>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="images/favicons/apple-touch-icon.png">
+	<link rel="icon" type="image/png" href="images/favicons/favicon-32x32.png" sizes="32x32">
+	<link rel="icon" type="image/png" href="images/favicons/favicon-16x16.png" sizes="16x16">
+	<link rel="manifest" href="images/favicons/manifest.json">
+	<link rel="mask-icon" href="images/favicons/safari-pinned-tab.svg" color="#5bbad5">
+	<meta name="theme-color" content="#ffe701">
+
+	<style>
+
+	/* This custom CSS applies to albums only. I made it all inline for now, and didn't edit the original style.css at all*/
+
+	a.blue{border:0;}
+
+	.lighter{opacity: .25}
+
+	.tophat{z-index: 1503;}
+	.tophat h1{font-size:15px; font-weight: 500; margin:0; line-height:1;}
+	.tophat h2{font-size:11px; font-weight: 400; margin:2px 0 0 0; line-height:1;}
+
+
+	.round-button{background:#1789FC; border-radius: 100px; color:#fff; font-weight: bold; text-transform: uppercase; padding:10px 20px; font-size:14px; text-align: center; display:inline-block;}
+	.round-button:hover{background:#302E64; color:#fff;}
+	.round-button.purple{background:#302E64;}
+	.round-button.purple:hover{background:#1789FC;}
+	.round-button.small{font-size:10px; padding:8px 12px;}
+	.tophat .dots{display: inline-block; width:20px; text-align: center; position: relative; left:8px; top:3px;}
+
+	.rows .row{border-top:1px solid #F3F3F3; padding:12px 0;}
+
+	.fit{max-width: 100%; width:100%; height: auto}
+
+	.modal{position: fixed; top:-500px; background: #fff; padding:1rem; padding-top:0; transition:.3s ease all; z-index: 1502; max-width:400px; left:50%; margin-left:-200px; border-radius:4px;}
+	.modal.open{top:110px}
+
+	.modal .rows .row:first-child{border:0;}
+
+	.modal .share .border-gutter:first-child{border-right:2px solid #fff;}
+	.modal .share .border-gutter:last-child{border-left:2px solid #fff;}
+
+
+	.backdrop{position: fixed; top:0; left:0; bottom:0; right:0; background:#1789FC; opacity: 0; transition: visibility 0s, opacity 0.3s linear; visibility: hidden; z-index: 1501}
+	.backdrop.open{visibility: visible; opacity: 0.8; }
+
+	.join.nag{position: fixed; bottom:1rem; right:0; left:0; text-align: center;}
+
+	@media screen and (min-width: 40em){
+	.album .grid .image{width:25%; padding-top:25%; position: relative; overflow: hidden; float:left; margin:0; border:2px solid #fff; box-sizing:border-box;}
+	.album .grid .image .actions{display:none;}
+	.album .grid .image img{object-fit: cover; width:100%; height:100%; position: absolute; top:0; left:0;}
+	}
+
+	@media screen and (max-width: 40em){
+
+		.album .grid{padding:0; margin:0 15px;}
+		.album .grid .actions{display: none;}
+		.album .grid .image{width:50%; line-height: 0; margin:0; padding:2px; box-sizing:border-box;}
+
+		.modal{bottom:-500px; top:auto; right:0; left:0; padding:1rem; padding-top:0; margin:0; border-radius:0px;}
+		.modal.open{bottom:0; top:auto;}
+	}
+	</style>
+
+</head>
+
+<body style="padding-top:60px;">
+
+<!-- This header bar changed a good bit, and should only be used on an album view -->
+<div class="tophat p2">
+<div class="clearfix max-width-4 mx-auto">
+	<div class="left line-height-0">
+		<a href="https://kandid.ly" class="xs-hide"><img class="logo" src="images/logo.svg" width="95"></a>
+		<a href="https://kandid.ly" class="sm-hide md-hide lg-hide">
+			<h1>Operation Tiny Home</h1>
+			<h2 class="blue">photos by kandid.ly</h2>
+		</a>
+	</div>
+	<div class="right">
+		<nav class="xs-hide">
+			<a href="https://kandid.ly/how-it-works">How<span class="sm-hide"> it Works</span></a>
+			<a href="https://kandid.ly/bookings/new">Request<span class="sm-hide">  a Photographer</span></a>
+			<span><a href="https://kandidly.zendesk.com/hc/en-us">FAQs</a></span>
+			<a class="btn outline" href="#">Sign In</a>
+		</nav>
+		<div class="sm-hide md-hide lg-hide album">
+			<a href="#" class="round-button small share"><i class="fa fa-share"></i> <span>SHARE</span></a>
+			<a href="#" class="dots"><i class="fa fa-ellipsis-v"></i></a>
+		</div>
+	</div>
+</div>
+</div>
+
+<!-- Start of main album body -->
+<div class="album max-width-4 mx-auto p2">
+
+	<!-- View toggle -->
+	<div class="view clearfix py1">
+	<div class="right">VIEW
+	<a href="#" class="grid lighter"><i class="fa fa-th"></i></a>
+	<a href="#" class="full"><i class="fa fa-bars"></i></a>
+	</div>
+	</div>
+
+	<!-- Start of album info/images -->
+	<div class="clearfix mxn2">
+	<div class="sm-col sm-col-12 md-col-5 lg-col-4 xs-hide px2">
+		<div class="details">
+			<div class="actions flex">
+				<a href="#" class="flex-auto round-button share mr2"><i class="fa fa-share"></i> SHARE ALBUM</a>
+				<a href="#" class="round-button">JOIN</a>
+			</div>
+			<p class="title h2 center">Operation Tiny Home</p>
+			<div class="album-details">
+				<div class="rows">
+					<div class="clearfix row">
+						<div class="left">Date</div>
+						<div class="right blue">June 14, 2017</div>
+					</div>
+					<div class="clearfix row">
+						<div class="left">Location</div>
+						<div class="right blue"><a href="#" class="blue"><i class="fa fa-map-marker"></i> San Antonio, Texas</a></div>
+					</div>
+					<div class="clearfix row">
+						<div class="left">Photographer</div>
+						<div class="right blue"><a href="#" class="blue">Clark Wimberly</a></div>
+					</div>
+				</div>
+				<div class="contextual-menu center sm-hide md-hide lg-hide">
+					<a href="#" class="round-button mb1">Sign in to Kandid.ly</a>
+					<nav>
+						<a href="#" class="block mb1">How it Works</a>
+						<a href="#" class="block mb1">Request a Photographer</a>
+						<a href="#" class="block">FAQs</a>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- The image stream -->
+	<div class="stream sm-col sm-col-12 md-col-7 lg-col-8 px2">
+
+		<!-- Image object (as suggested by Photoswipe -->
+		<figure class="image m0 mb3" itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
+	        <a href="single.html" class="fullsize" data-large-href="sample/image1.jpg" itemprop="contentUrl" data-size="1400x933">
+	            <img src="sample/thumbs/image1.jpg" class="fit" itemprop="thumbnail" alt="Image description" />
+	        </a>
+	        <figcaption class="hide" itemprop="caption description">Image caption</figcaption>
+			<div class="actions clearfix">
+				<div class="col col-6 bold h6"><a href="http://google.com"><i class="fa fa-heart"></i> LIKE</a></div>
+				<div class="col col-6 right-align bold h6"><a href="#"><i class="fa fa-share"></i> SHARE <span class="light">kandid.ly/p/as8126</span></a> </div>
+			</div>
+		</figure>
+
+		<figure class="image m0 mb3" itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
+	        <a href="single.html" class="fullsize" data-large-href="sample/image2.jpg" itemprop="contentUrl" data-size="1400x933">
+	            <img src="sample/thumbs/image2.jpg" class="fit" itemprop="thumbnail" alt="Image description" />
+	        </a>
+	        <figcaption class="hide" itemprop="caption description">Image caption</figcaption>
+			<div class="actions clearfix">
+				<div class="col col-6 bold h6"><a href="#"><i class="fa fa-heart"></i> LIKE</a></div>
+				<div class="col col-6 right-align bold h6"><a href="#"><i class="fa fa-share"></i> SHARE <span class="light">kandid.ly/p/as8126</span></a> </div>
+			</div>
+		</figure>
+
+		<figure class="image m0 mb3" itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
+	        <a href="single.html" class="fullsize" data-large-href="sample/image3.jpg" itemprop="contentUrl" data-size="1400x933">
+	            <img src="sample/thumbs/image3.jpg" class="fit" itemprop="thumbnail" alt="Image description" />
+	        </a>
+	        <figcaption class="hide" itemprop="caption description">Image caption</figcaption>
+			<div class="actions clearfix">
+				<div class="col col-6 bold h6"><a href="#"><i class="fa fa-heart"></i> LIKE</a></div>
+				<div class="col col-6 right-align bold h6"><a href="#"><i class="fa fa-share"></i> SHARE <span class="light">kandid.ly/p/as8126</span></a> </div>
+			</div>
+		</figure>
+
+		<figure class="image m0 mb3" itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
+	        <a href="single.html" class="fullsize" data-large-href="sample/image4.jpg" itemprop="contentUrl" data-size="1400x2100">
+	            <img src="sample/thumbs/image4.jpg" class="fit" itemprop="thumbnail" alt="Image description" />
+	        </a>
+	        <figcaption class="hide" itemprop="caption description">Image caption</figcaption>
+			<div class="actions clearfix">
+				<div class="col col-6 bold h6"><a href="#"><i class="fa fa-heart"></i> LIKE</a></div>
+				<div class="col col-6 right-align bold h6"><a href="#"><i class="fa fa-share"></i> SHARE <span class="light">kandid.ly/p/as8126</span></a> </div>
+			</div>
+		</figure>
+
+		<figure class="image m0 mb3" itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
+	        <a href="single.html" class="fullsize" data-large-href="sample/image5.jpg" itemprop="contentUrl" data-size="1400x1068">
+	            <img src="sample/thumbs/image5.jpg" class="fit" itemprop="thumbnail" alt="Image description" />
+	        </a>
+	        <figcaption class="hide" itemprop="caption description">Image caption</figcaption>
+			<div class="actions clearfix">
+				<div class="col col-6 bold h6"><a href="#"><i class="fa fa-heart"></i> LIKE</a></div>
+				<div class="col col-6 right-align bold h6"><a href="#"><i class="fa fa-share"></i> SHARE <span class="light">kandid.ly/p/as8126</span></a> </div>
+			</div>
+		</figure>
+
+		<figure class="image m0 mb3" itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
+	        <a href="single.html" class="fullsize" data-large-href="sample/image6.jpg" itemprop="contentUrl" data-size="1400x1721">
+	            <img src="sample/thumbs/image6.jpg" class="fit" itemprop="thumbnail" alt="Image description" />
+	        </a>
+	        <figcaption class="hide" itemprop="caption description">Image caption</figcaption>
+			<div class="actions clearfix">
+				<div class="col col-6 bold h6"><a href="#"><i class="fa fa-heart"></i> LIKE</a></div>
+				<div class="col col-6 right-align bold h6"><a href="#"><i class="fa fa-share"></i> SHARE <span class="light">kandid.ly/p/as8126</span></a> </div>
+			</div>
+		</figure>
+
+		<figure class="image m0 mb3" itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
+	        <a href="single.html" class="fullsize" data-large-href="sample/image7.jpg" itemprop="contentUrl" data-size="1400x933">
+	            <img src="sample/thumbs/image7.jpg" class="fit" itemprop="thumbnail" alt="Image description" />
+	        </a>
+	        <figcaption class="hide" itemprop="caption description">Image caption</figcaption>
+			<div class="actions clearfix">
+				<div class="col col-6 bold h6"><a href="#"><i class="fa fa-heart"></i> LIKE</a></div>
+				<div class="col col-6 right-align bold h6"><a href="#"><i class="fa fa-share"></i> SHARE <span class="light">kandid.ly/p/as8126</span></a> </div>
+			</div>
+		</figure>
+
+		<figure class="image m0 mb3" itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
+	        <a href="single.html" class="fullsize" data-large-href="sample/image8.jpg" itemprop="contentUrl" data-size="1400x935">
+	            <img src="sample/thumbs/image8.jpg" class="fit" itemprop="thumbnail" alt="Image description" />
+	        </a>
+	        <figcaption class="hide" itemprop="caption description">Image caption</figcaption>
+			<div class="actions clearfix">
+				<div class="col col-6 bold h6"><a href="#"><i class="fa fa-heart"></i> LIKE</a></div>
+				<div class="col col-6 right-align bold h6"><a href="#"><i class="fa fa-share"></i> SHARE <span class="light">kandid.ly/p/as8126</span></a> </div>
+			</div>
+		</figure>
+
+		<figure class="image m0 mb3" itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
+	        <a href="single.html" class="fullsize" data-large-href="sample/image9.jpg" itemprop="contentUrl" data-size="1400x933">
+	            <img src="sample/thumbs/image9.jpg" class="fit" itemprop="thumbnail" alt="Image description" />
+	        </a>
+	        <figcaption class="hide" itemprop="caption description">Image caption</figcaption>
+			<div class="actions clearfix">
+				<div class="col col-6 bold h6"><a href="#"><i class="fa fa-heart"></i> LIKE</a></div>
+				<div class="col col-6 right-align bold h6"><a href="#"><i class="fa fa-share"></i> SHARE <span class="light">kandid.ly/p/as8126</span></a> </div>
+			</div>
+		</figure>
+
+	</div>
+	</div>
+</div>
+
+
+<!-- JOIN button that only shows on mobile -->
+<div class="sm-hide md-hide lg-hide join nag">
+	<a href="#" class="round-button">JOIN ALBUM</a>
+</div>
+
+<!-- Empty modal that I fill with stuff -->
+<div class="modal">
+</div>
+
+<!-- Big blue area used below the modal -->
+<div class="backdrop">
+	&nbsp;
+</div>
+
+<!-- Contents of the sharing modal, which I clone() on button click -->
+<div class="hide">
+<div class="share single">
+	<div class="rows">
+		<div class="clearfix row">
+			<div class="left">Share URL</div>
+			<div class="right blue">kandid.ly/p/as8126</div>
+		</div>
+	</div>
+	<div class="clearfix mb1">
+	  <div class="col col-6">
+	  	<div class="border-gutter">
+	  	<img class="fit" src="http://via.placeholder.com/640x480" width="640" height="480" alt="">
+	  	</div>
+	  </div>
+	  <div class="col col-6">
+	  	<div class="border-gutter">
+	  	<img class="fit" src="http://via.placeholder.com/640x480" width="640" height="480" alt="">
+	  	</div>
+	  </div>
+	</div>
+	<div class="clearfix flex">
+		<a href="" class="flex-auto round-button small"><i class="fa fa-facebook-square"></i> Facebook</a>
+		<a href="" class="flex-auto round-button small mx1"><i class="fa fa-twitter"></i> Twitter</a>
+		<a href="" class="flex-auto round-button small"><i class="fa fa-envelope"></i> Email</a>
+	</div>
+	</div>
+</div>
+
+<div class="footer gray clearfix py4">
+<div class="max-width-4 mx-auto mxn2">
+	<div class="sm-col-right sm-col sm-col-6 right-align px2">
+		<a class="btn outline big sm-block mb3" href="https://kandid.ly/how-it-works#photographer">
+<svg width="24px" viewBox="661 3715 30 24" class="mr2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M689.125,3719.5 C690.165039,3719.5 691,3720.33496 691,3721.375 L691,3736.375 C691,3737.41504 690.165039,3738.25 689.125,3738.25 L662.875,3738.25 C661.834961,3738.25 661,3737.41504 661,3736.375 L661,3721.375 C661,3720.33496 661.834961,3719.5 662.875,3719.5 L668.5,3719.5 L669.408203,3716.76074 C669.613281,3716.2041 670.199219,3715.75 670.785156,3715.75 L681.214844,3715.75 C681.756836,3715.75 682.386719,3716.2041 682.5625,3716.76074 L683.5,3719.5 L689.125,3719.5 Z M676,3734.5 C679.09082,3734.5 681.625,3731.99512 681.625,3728.875 C681.625,3725.78418 679.09082,3723.25 676,3723.25 C672.879883,3723.25 670.375,3725.78418 670.375,3728.875 C670.375,3731.99512 672.879883,3734.5 676,3734.5 Z" id="camera" stroke="none" fill="currentColor" fill-rule="evenodd"></path>
+</svg>Photographer Sign Up</a>
+	</div>
+	<div class="sm-col sm-col-6 px2">
+		<div class="table mb2">
+		<div class="table-cell align-middle pr2"><a href="/"><img class="logo" src="images/logo.svg" width="95"></a></div>
+		<div class="table-cell align-middle pr2"><a href="https://instagram.com/bekandid"><img src="images/icon-instagram.svg" alt=""></a></div>
+		<div class="table-cell align-middle pr2"><a href="https://www.facebook.com/kandid.ly"><img src="images/icon-facebook.svg" alt=""></a></div>
+		<div class="table-cell align-middle pr2"><a href="https://twitter.com/bekandid"><img src="images/icon-twitter.svg" alt=""></a></div>
+		</div>
+
+		<div class="clearfix mb2">
+		<div class="left mr3">
+			<a href="https://kandid.ly/about" class="block mb1">About Us</a>
+			<a href="https://kandid.ly/safety-and-security" class="block mb1">Security</a>
+			<a href="http://blog.kandid.ly/" class="block mb1">Blog</a>
+			<a href="https://kandid.ly/cities" class="block mb1">City Directory</a>
+		</div>
+		<div class="left mr3">
+			<a href="https://kandid.ly/terms" class="block mb1">Terms</a>
+			<a href="https://kandid.ly/privacy" class="block mb1">Privacy</a>
+			<a href="https://kandidly.zendesk.com/hc/en-us" class="block mb1">FAQs</a>
+		</div>
+		<img class="logo left" src="images/logo-techstars.svg" width="80">
+		</div>
+		
+
+	</div>
+</div>
+
+</div>
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+
+                <div class="sm-hide md-hide lg-hide join nag">
+				<a href="#" class="round-button"><i class="fa fa-heart"></i> LIKE</a>
+				<a href="#" class="round-button purple"><i class="fa fa-arrow-down"></i> SAVE</a>
+			</div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Mostly basic copy/paste from main Photoswipe docs -->
+<script>
+	var initPhotoSwipeFromDOM = function(gallerySelector) {
+
+    // parse slide data (url, title, size ...) from DOM elements 
+    // (children of gallerySelector)
+    var parseThumbnailElements = function(el) {
+        var thumbElements = el.childNodes,
+            numNodes = thumbElements.length,
+            items = [],
+            figureEl,
+            linkEl,
+            size,
+            item;
+
+        for(var i = 0; i < numNodes; i++) {
+
+            figureEl = thumbElements[i]; // <figure> element
+
+            // include only element nodes 
+            if(figureEl.nodeType !== 1) {
+                continue;
+            }
+
+            linkEl = figureEl.children[0]; // <a> element
+
+            size = linkEl.getAttribute('data-size').split('x');
+
+            // create slide object
+            item = {
+            	// I changed this, to use a data attribute instead of href, so that can still link to single view URL
+                src: linkEl.getAttribute('data-large-href'),
+                w: parseInt(size[0], 10),
+                h: parseInt(size[1], 10)
+            };
+
+
+
+            if(figureEl.children.length > 1) {
+                // <figcaption> content
+                item.title = figureEl.children[1].innerHTML; 
+            }
+
+            if(linkEl.children.length > 0) {
+                // <img> thumbnail element, retrieving thumbnail url
+                item.msrc = linkEl.children[0].getAttribute('src');
+            } 
+
+            item.el = figureEl; // save link to element for getThumbBoundsFn
+            items.push(item);
+        }
+
+        return items;
+    };
+
+    // find nearest parent element
+    var closest = function closest(el, fn) {
+        return el && ( fn(el) ? el : closest(el.parentNode, fn) );
+    };
+
+    // triggers when user clicks on thumbnail
+    var onThumbnailsClick = function(e) {
+        e = e || window.event;
+        e.preventDefault ? e.preventDefault() : e.returnValue = false;
+
+        var eTarget = e.target || e.srcElement;
+
+        // find root element of slide
+        var clickedListItem = closest(eTarget, function(el) {
+            return (el.tagName && el.tagName.toUpperCase() === 'FIGURE');
+        });
+
+        if(!clickedListItem) {
+            return;
+        }
+
+        // find index of clicked item by looping through all child nodes
+        // alternatively, you may define index via data- attribute
+        var clickedGallery = clickedListItem.parentNode,
+            childNodes = clickedListItem.parentNode.childNodes,
+            numChildNodes = childNodes.length,
+            nodeIndex = 0,
+            index;
+
+        for (var i = 0; i < numChildNodes; i++) {
+            if(childNodes[i].nodeType !== 1) { 
+                continue; 
+            }
+
+            if(childNodes[i] === clickedListItem) {
+                index = nodeIndex;
+                break;
+            }
+            nodeIndex++;
+        }
+
+
+
+        if(index >= 0) {
+            // open PhotoSwipe if valid index found
+            openPhotoSwipe( index, clickedGallery );
+        }
+        return false;
+    };
+
+    // parse picture index and gallery index from URL (#&pid=1&gid=2)
+    var photoswipeParseHash = function() {
+        var hash = window.location.hash.substring(1),
+        params = {};
+
+        if(hash.length < 5) {
+            return params;
+        }
+
+        var vars = hash.split('&');
+        for (var i = 0; i < vars.length; i++) {
+            if(!vars[i]) {
+                continue;
+            }
+            var pair = vars[i].split('=');  
+            if(pair.length < 2) {
+                continue;
+            }           
+            params[pair[0]] = pair[1];
+        }
+
+        if(params.gid) {
+            params.gid = parseInt(params.gid, 10);
+        }
+
+        return params;
+    };
+
+    var openPhotoSwipe = function(index, galleryElement, disableAnimation, fromURL) {
+        var pswpElement = document.querySelectorAll('.pswp')[0],
+            gallery,
+            options,
+            items;
+
+        items = parseThumbnailElements(galleryElement);
+
+        // define options (if needed)
+        options = {
+
+            // define gallery index (for URL)
+            galleryUID: galleryElement.getAttribute('data-pswp-uid'),
+
+            getThumbBoundsFn: function(index) {
+                // See Options -> getThumbBoundsFn section of documentation for more info
+                var thumbnail = items[index].el.getElementsByTagName('img')[0], // find thumbnail
+                    pageYScroll = window.pageYOffset || document.documentElement.scrollTop,
+                    rect = thumbnail.getBoundingClientRect(); 
+
+                return {x:rect.left, y:rect.top + pageYScroll, w:rect.width};
+            }
+
+        };
+
+        // PhotoSwipe opened from URL
+        if(fromURL) {
+            if(options.galleryPIDs) {
+                // parse real index when custom PIDs are used 
+                // http://photoswipe.com/documentation/faq.html#custom-pid-in-url
+                for(var j = 0; j < items.length; j++) {
+                    if(items[j].pid == index) {
+                        options.index = j;
+                        break;
+                    }
+                }
+            } else {
+                // in URL indexes start from 1
+                options.index = parseInt(index, 10) - 1;
+            }
+        } else {
+            options.index = parseInt(index, 10);
+        }
+
+        // exit if index not found
+        if( isNaN(options.index) ) {
+            return;
+        }
+
+        if(disableAnimation) {
+            options.showAnimationDuration = 0;
+        }
+
+        // Pass data to PhotoSwipe and initialize it
+        gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
+        gallery.init();
+    };
+
+    // loop through all gallery elements and bind events
+    var galleryElements = document.querySelectorAll( gallerySelector );
+
+    for(var i = 0, l = galleryElements.length; i < l; i++) {
+        galleryElements[i].setAttribute('data-pswp-uid', i+1);
+        galleryElements[i].onclick = onThumbnailsClick;
+    }
+
+    // Parse URL and open gallery if it contains #&pid=3&gid=1
+    var hashData = photoswipeParseHash();
+    if(hashData.pid && hashData.gid) {
+        openPhotoSwipe( hashData.pid ,  galleryElements[ hashData.gid - 1 ], true, true );
+    }
+};
+
+// execute above function
+initPhotoSwipeFromDOM('.stream');
+</script>
+
+
+<link rel="stylesheet" href="css/photoswipe.css"> 
+<link rel="stylesheet" href="css/default-skin/default-skin.css"> 
+<script src="js/photoswipe.min.js"></script> 
+<script src="js/photoswipe-ui-default.js"></script> 
+<script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+</body>
+</html>
